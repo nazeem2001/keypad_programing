@@ -1,64 +1,104 @@
-    #include <Keypad.h>
-    #include <HIDKeyboard.h>
+#include <Keypad.h>
+#include <HIDKeyboard.h>
 
-    HIDKeyboard keyboard; // Initialize HIDKeyboard object
+HIDKeyboard keyboard; // Initialize HIDKeyboard object
 
-    const byte ROWS = 3; //four rows
-    const byte COLS = 3; //four columns
-    //define the cymbols on the buttons of the keypads
-    char hexaKeys[ROWS][COLS] = {
-      {'1','2','3'},
-      {'4','5','6'},
-      {'7','8','9'}
-    };
-    byte rowPins[ROWS] = {2,3,4}; //connect to the row pinouts of the keypad
-    byte colPins[COLS] = {7,6,5}; //connect to the column pinouts of the keypad
-    //initialize an instance of class NewKeypad
-    Keypad customKeypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
-    const int num0=0;
-    void setup(){
-      keyboard.begin();
-      pinMode(LED_BUILTIN, OUTPUT);
-      pinMode(num0,INPUT_PULLUP);
-      delay(2000);
+const byte ROWS = 3; //four rows
+const byte COLS = 3; //four columns
+//define the cymbols on the buttons of the keypads
+char hexaKeys[ROWS][COLS] = {
+  {'1','2','3'},
+  {'4','5','6'},
+  {'7','8','9'}
+};
+byte rowPins[ROWS] = {2,3,4}; //connect to the row pinouts of the keypad
+byte colPins[COLS] = {7,6,5}; //connect to the column pinouts of the keypad
+bool num=false;
+//initialize an instance of class NewKeypad
+Keypad customKeypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
+const int num0=0;
+void setup(){
+  keyboard.begin();
+   pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(num0,INPUT_PULLUP);// Start communication
+  delay(1000);
+  for(int i=0;i<10;i++){
+
+    if (digitalRead(num0)==0){
+      num=true;
     }
+    else{
+      num=false;
+      break;
+    }
+    delay(100);
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(100);
+    digitalWrite(LED_BUILTIN, LOW);
 
-    void loop(){
-      char customKey = customKeypad.getKey();
+  }
+  delay(2000);
+}
 
-      if (customKey){
-      //   Serial.println(customKey);
+void loop(){
+  char customKey = customKeypad.getKey();
 
+  if (customKey){
+  //   Serial.println(customKey);
 
-        switch(customKey)
-        {
-          case '1':break;
-          case '2':break;
-          case '3':break;
-          case '4':break;
-          case '5':break;
-          case '6':break;
-          case '7':break;
-          case '8':break;
-          case '9':break;
-        }
-
-          pinMode(num0,OUTPUT);
-          delay(300);
-          digitalWrite(num0,HIGH);
-
-            pinMode(num0,INPUT_PULLUP);
-     }
-    if(digitalRead(num0)==0){
-
-        for(;;){
-          if(digitalRead(num0)==1){
-
-            //what to do
-            break;
-          }
-       }
-       delay(300);
-
+    if (num==false){
+      switch(customKey)
+      {
+        case '1':break;
+        case '2':break;
+        case '3':break;
+        case '4':break;
+        case '5':break;
+        case '6':break;
+        case '7':break;
+        case '8':break;
+        case '9':break;
       }
     }
+    else{
+      keyboard.tapSpecialKey(NUMLOCK);
+      switch(customKey)
+      {
+        case '1':keyboard.tapSpecialKey(KEYPAD1);break;
+        case '2':keyboard.tapSpecialKey(KEYPAD2);break;
+        case '3':keyboard.tapSpecialKey(KEYPAD3);break;
+        case '4':keyboard.tapSpecialKey(KEYPAD4);break;
+        case '5':keyboard.tapSpecialKey(KEYPAD5);break;
+        case '6':keyboard.tapSpecialKey(KEYPAD6);break;
+        case '7':keyboard.tapSpecialKey(KEYPAD7);break;
+        case '8':keyboard.tapSpecialKey(KEYPAD8);break;
+        case '9':keyboard.tapSpecialKey(KEYPAD9);break;
+      }
+      keyboard.tapSpecialKey(NUMLOCK);
+    }
+
+      pinMode(num0,OUTPUT);
+      delay(300);
+      digitalWrite(num0,HIGH);
+
+        pinMode(num0,INPUT_PULLUP);
+ }
+if(digitalRead(num0)==0){
+
+    for(;;){
+      if(digitalRead(num0)==1){
+        if (num==false){
+
+
+        }
+        else{
+          keyboard.tapSpecialKey(NUMLOCK); keyboard.tapSpecialKey(KEYPAD0);keyboard.tapSpecialKey(NUMLOCK);
+        }
+        //what to do
+        break;
+      }
+   }
+   delay(300);
+
+  }
+}

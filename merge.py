@@ -9,8 +9,8 @@ for i in range(0 ,10):
         code.append(' ')
 print( sorce )
 for i in range(1 ,10):
-    sorce[i+33]=f"case '{i}': digitalWrite(LED_BUILTIN, HIGH); {code[i]}  digitalWrite(LED_BUILTIN, LOW); break; \n"
-sorce[55]=f'digitalWrite(LED_BUILTIN, HIGH); {code[0]}digitalWrite(LED_BUILTIN, LOW); '
+    sorce[i+50]=f"case '{i}': digitalWrite(LED_BUILTIN, HIGH); {code[i]}  digitalWrite(LED_BUILTIN, LOW); break; \n"
+sorce[90]=f'digitalWrite(LED_BUILTIN, HIGH); {code[0]}digitalWrite(LED_BUILTIN, LOW); '
 
 print( code )
 with open("code_final.txt","w") as output:

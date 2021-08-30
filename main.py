@@ -1,12 +1,11 @@
 import string
 import time
-from pynput.keyboard._win32 import KeyCode
 from pynput import keyboard
 from math import ceil
 import sys
 
 num = int( sys.argv[1] )
-# num=int(input("enter the button number(0-9):"))
+#num=int(input("enter the button number(0-9):"))
 # if num>9:
 #    raise ValueError("enter valid value")
 special_keymap = {
@@ -45,13 +44,17 @@ def key_handeler_pressed(key):
     if key in modifier_key or ((key == "Key.ctrl_l") or (key == "Key.ctrl_r")):
         modified = 0
         key_was_aln = 0
-        if time1 != 0:
-            if (key != "Key.ctrl_l") and (key != "Key.ctrl_r"):
-                if not modifier[key]:
-                    no_of_modifier += 1
-                modifier[key] = 1
-
+        if (key == "Key.ctrl_l") or (key == "Key.ctrl_r"):
+            ctrl = 1
+            ctrl_m = 0
+        #if time1 != 0:
+        if (key != "Key.ctrl_l") and (key != "Key.ctrl_r"):
+            if not modifier[key]:
+                no_of_modifier += 1
+            modifier[key] = 1
+        print( key , ctrl , ctrl_m , no_of_modifier , modified )
         pass
+
     else:
         if ctrl == 0:
             modifier_active = 0
@@ -109,9 +112,7 @@ def key_handeler_pressed(key):
                         output.write( f'''keyboard.tapSpecialKey(({modifier_str}),F{n}); ''' )
 
             time_modifier = ceil( (time.time_ns() - time1) / 1000000 )
-        if (key == "Key.ctrl_l") or (key == "Key.ctrl_r"):
-            ctrl = 1
-            ctrl_m = 0
+
 
         if ctrl == 1:
             modified = 1
@@ -169,6 +170,7 @@ def key_handeler_pressed(key):
             # ctrl=0
 
         time1 = time.time_ns()
+        print( key , ctrl , ctrl_m , no_of_modifier , modified )
 
 
 def key_handeler_relased(key):
