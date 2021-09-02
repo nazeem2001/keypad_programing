@@ -16,17 +16,17 @@ special_keymap = {
     "Key.insert": "INSERT" , "Key.home": "HOME" , "Key.page_up": "PAGEUP" , "Key.delete": "DELETE" , "Key.end": "END" ,
     "Key.page_down": "PAGEDOWN" , "Key.right": "RIGHTARROW" , "Key.left": "LEFTARROW" , "Key.down": "DOWNARROW" ,
     "Key.up": "UPARROW" , "Key.num_lock": "NUMLOCK" , "Key.cmd": "GUI" , "Key.alt_l": "ALT" , "Key.alt_gr": "ALT" ,
-    "Key.menu": "KEYBOARDAPPLICATION" , "Key.shift": "SHIFT" , "Key.shift_r": "SHIFT"
+    "Key.menu": "KEYBOARDAPPLICATION" , "Key.shift": "SHIFT" , "Key.shift_r": "SHIFT","Key.ctrl_l":"CTRL","Key.ctrl_r":"CTRL"
 }
-modifier = {"Key.cmd": 0 , "Key.alt_l": 0 , "Key.alt_gr": 0 , "Key.shift": 0 , "Key.shift_r": 0}
+modifier = {"Key.cmd": 0 , "Key.alt_l": 0 , "Key.alt_gr": 0 , "Key.shift": 0 , "Key.shift_r": 0,
+            "Key.ctrl_l":0,"Key.ctrl_r":0}
 time1 = 0
 output = open( f"output{num}.txt" , "w" )
 output.close()
 no_of_modifier = 0
 modified = 0
 printables = list( string.punctuation + string.ascii_letters + string.digits )
-ctrl = 0
-ctrl_m = 0
+
 modifier_key = modifier.keys()
 key_was_aln = 0
 special_keymap_keys = special_keymap.keys()
@@ -35,165 +35,109 @@ time_modifier = 0
 
 
 def key_handeler_pressed(key):
-    global time1 , ctrl , time_modifier , modified , ctrl_m , no_of_modifier , key_was_aln
-    key = str( key )
-    print( len( key ) , key , ctrl )
+    global time1 , time_modifier , modified , no_of_modifier , key_was_aln
+    #key = listener.canonical( key )
+    s_key = str( key )
+    print( len( s_key ) , key  )
 
     delay = ceil( (time.time_ns() - time1) / 1000000 )
 
-    if key in modifier_key or ((key == "Key.ctrl_l") or (key == "Key.ctrl_r")):
+    if s_key in modifier_key :
         modified = 0
         key_was_aln = 0
-        if (key == "Key.ctrl_l") or (key == "Key.ctrl_r"):
-            ctrl = 1
-            ctrl_m = 0
-        #if time1 != 0:
-        if (key != "Key.ctrl_l") and (key != "Key.ctrl_r"):
-            if not modifier[key]:
-                no_of_modifier += 1
-            modifier[key] = 1
-        print( key , ctrl , ctrl_m , no_of_modifier , modified )
+
+
+        if not modifier[s_key]:
+            no_of_modifier += 1
+        modifier[s_key] = 1
+        print( s_key , no_of_modifier , modified ,modifier )
         pass
 
     else:
-        if ctrl == 0:
-            modifier_active = 0
-            modifier_str = ''
-            for x in modifier:
-                if modifier[x] == 1:
-                    modifier_active = 1
-                    modifier_str = f"{modifier_str}{special_keymap[x]}|"
-                    modified = 1
-            modifier_str = modifier_str[:-1]
-            print( modifier_str )
-            if key in special_keymap_keys:
-                key_was_aln = 0
 
-            if time1 != 0 and not key_was_aln:
-                print( f'''delay({delay});''' , end=" " )
-                with open( f"output{num}.txt" , "a" )as output:
-                    output.write( f'''delay({delay}); ''' )
+        modifier_active = 0
+        modifier_str = ''
+        for x in modifier:
+            if modifier[x] == 1:
+                modifier_active = 1
+                modifier_str = f"{modifier_str}{special_keymap[x]}|"
+                modified = 1
+        modifier_str = modifier_str[:-1]
+        print( modifier_str )
+        print(s_key)
+        if s_key in special_keymap_keys:
+            key_was_aln = 0
 
-            if (len( key ) == 4) & (key[0] == "'"):
-                print( modifier_str[:-1] )
-                print( f'''keyboard.tapKey('\\');''' , end=" " )
-                with open( f"output{num}.txt" , "a" )as output:
-                    output.write( f'''keyboard.tapKey('\\'); ''' )
-            if key in special_keymap_keys:
-                if key not in modifier_key:
-                    if modifier_active == 1:
-                        print( f'''keyboard.tapSpecialKey(({modifier_str}),{special_keymap[key]});''' , end=" " )
-                        with open( f"output{num}.txt" , "a" )as output:
-                            output.write( f'''keyboard.tapSpecialKey(({modifier_str}),{special_keymap[key]}); ''' )
-                    else:
-                        print( f'''keyboard.tapSpecialKey({special_keymap[key]});''' , end=" " )
-                        with open( f"output{num}.txt" , "a" )as output:
-                            output.write( f'''keyboard.tapSpecialKey({special_keymap[key]}); ''' )
-            if len( key ) == 3:
+        if time1 != 0 and not key_was_aln:
+            print( f'''delay({delay});''' , end=" " )
+            with open( f"output{num}.txt" , "a" )as output:
+                output.write( f'''delay({delay}); ''' )
 
-                if key[1] in printables:
-                    if modifier_active and not (
-                            (modifier["Key.shift_r"] == 1 or modifier["Key.shift"] == 1) and no_of_modifier == 1):
-                        key_was_aln = 0
-                        print( f'''keyboard.tapKey(({modifier_str}),{key});''' , end=" " )
-                        with open( f"output{num}.txt" , "a" )as output:
-                            output.write( f'''keyboard.tapKey(({modifier_str}),{key}); ''' )
-                    else:
-                        key_was_aln = 1
-                        print( f'''keyboard.tapKey({key});''' , end=" " )
-                        with open( f"output{num}.txt" , "a" )as output:
-                            output.write( f'''keyboard.tapKey({key}); ''' )
-
-            if key[0:5] == "Key.f":
-                n = int( key[5:] )
-                if modifier_active:
-                    print( f'''keyboard.tapSpecialKey(({modifier_str}),F{n});''' , end=" " )
-                    with open( f"output{num}.txt" , "a" )as output:
-                        output.write( f'''keyboard.tapSpecialKey(({modifier_str}),F{n}); ''' )
-
-            time_modifier = ceil( (time.time_ns() - time1) / 1000000 )
-
-
-        if ctrl == 1:
-            modified = 1
-            ctrl_m = 1
-            modifier_active = 0
-            modifier_str = ''
-            for x in modifier:
-                if modifier[x] == 1:
-                    modifier_active = 1
-                    modifier_str = f"{modifier_str}{special_keymap[x]}|"
-            modifier_str = modifier_str[:-1]
+        if (len( s_key ) == 4) & (s_key[0] == "'"):
             print( modifier_str[:-1] )
-
-            if time1 != 0:
-                print( f'''delay({delay});''' , end=" " )
-                with open( f"output{num}.txt" , "a" )as output:
-                    output.write( f'''delay({delay}); ''' )
-            if len( key ) <= 6:
-
-                if key[2] == 'x':
-
-                    key1 = key[3:5]
-                    char = (string.ascii_lowercase + "[\]")[int( key1 , 16 ) - 1]
-                    if modifier_active:
-                        print( f'''keyboard.tapKey((CTRL|{modifier_str}),'{char}');''' , end=" " )
-                        with open( f"output{num}.txt" , "a" )as output:
-                            output.write( f'''keyboard.tapKey((CTRL|{modifier_str}),'{char}'); ''' )
-                    else:
-                        print( f'''keyboard.tapKey(CTRL,'{char}');''' , end=" " )
-                        with open( f"output{num}.txt" , "a" )as output:
-                            output.write( f'''keyboard.tapKey(CTRL,'{char}'); ''' )
-                if (key[0] == '<') & (len( key ) == 4):
-                    numb = int( key[1:3] ) - 48
-                    if numb < 10 and numb > -1:
-                        if modifier_active:
-                            print( f'''keyboard.tapKey((CTRL|{modifier_str}),'{numb}');''' , end=" " )
-                            with open( f"output{num}.txt" , "a" )as output:
-                                output.write( f'''keyboard.tapKey((CTRL|{modifier_str}),'{numb}'); ''' )
-                        else:
-                            print( f'''keyboard.tapKey(CTRL,'{numb}');''' , end=" " )
-                            with open( f"output{num}.txt" , "a" )as output:
-                                output.write( f'''keyboard.tapKey(CTRL,'{numb}'); ''' )
-
-                if key[0:5] == "Key.f":
-                    n = int( key[5:] )
-                    if modifier_active:
-                        print( f'''keyboard.tapSpecialKey((CTRL|{modifier_str}),F{n});''' , end=" " )
-                        with open( f"output{num}.txt" , "a" )as output:
-                            output.write( f'''keyboard.tapSpecialKey((CTRL|{modifier_str}),F{n}); ''' )
-            else:
-                if modifier_active:
-                    print( f'''keyboard.tapSpecialKey((CTRL|{modifier_str}),{special_keymap[key]});''' , end=" " )
+            print( f'''keyboard.tapKey('\\');''' , end=" " )
+            with open( f"output{num}.txt" , "a" )as output:
+                output.write( f'''keyboard.tapKey('\\'); ''' )
+        elif s_key in special_keymap_keys:
+            if s_key not in modifier_key:
+                if modifier_active == 1:
+                    print( f'''keyboard.tapSpecialKey(({modifier_str}),{special_keymap[s_key]});''' , end=" " )
                     with open( f"output{num}.txt" , "a" )as output:
-                        output.write( f'''keyboard.tapSpecialKey((CTRL|{modifier_str}),{special_keymap[key]}); ''' )
-            # ctrl=0
+                        output.write( f'''keyboard.tapSpecialKey(({modifier_str}),{special_keymap[s_key]}); ''' )
+                else:
+                    print( f'''keyboard.tapSpecialKey({special_keymap[s_key]});''' , end=" " )
+                    with open( f"output{num}.txt" , "a" )as output:
+                        output.write( f'''keyboard.tapSpecialKey({special_keymap[s_key]}); ''' )
+        elif len( s_key ) == 3 and not(modifier["Key.ctrl_r"]==1 or modifier["Key.ctrl_l"]==1):
+
+            if s_key[1] in printables:
+                if modifier_active:
+                    print("aln")
+                    '''and not (
+                        (modifier["Key.shift_r"] == 1 or modifier["Key.shift"] == 1) and no_of_modifier == 1)'''
+                    key_was_aln = 0
+                    print( f'''keyboard.tapKey(({modifier_str}),{s_key});''' , end=" " )
+                    with open( f"output{num}.txt" , "a" )as output:
+                        output.write( f'''keyboard.tapKey(({modifier_str}),{s_key}); ''' )
+                else:
+                    key_was_aln = 1
+                    print( f'''keyboard.tapKey({s_key});''' , end=" " )
+                    with open( f"output{num}.txt" , "a" )as output:
+                        output.write( f'''keyboard.tapKey({s_key}); ''' )
+
+        elif s_key[0:5] == "Key.f":
+            n = int( s_key[5:] )
+            if modifier_active:
+                print( f'''keyboard.tapSpecialKey(({modifier_str}),F{n});''' , end=" " )
+                with open( f"output{num}.txt" , "a" )as output:
+                    output.write( f'''keyboard.tapSpecialKey(({modifier_str}),F{n}); ''' )
+
+        elif modifier["Key.ctrl_r"]==1 or modifier["Key.ctrl_l"]==1:
+            O_key = listener.canonical( key )
+            O_key=str(O_key)
+            print( O_key[1],"KJQJAS")
+            if O_key[1] in printables:
+                key_was_aln = 0
+                print( f'''keyboard.tapKey(({modifier_str}),{O_key});''' , end=" " )
+                with open( f"output{num}.txt" , "a" )as output:
+                    output.write( f'''keyboard.tapKey(({modifier_str}),{O_key}); ''' )
+
+
+        time_modifier = ceil( (time.time_ns() - time1) / 1000000 )
+
 
         time1 = time.time_ns()
-        print( key , ctrl , ctrl_m , no_of_modifier , modified )
+        print( key , no_of_modifier , modified )
 
 
 def key_handeler_relased(key):
-    global time1 , ctrl , modified , ctrl_m , no_of_modifier
-    print( key , ctrl , ctrl_m , no_of_modifier , modified )
+    global time1 , modified , no_of_modifier
+    #print( key ,  no_of_modifier , modified )
+    print( listener.canonical( key ) )
     key = str( key )
     delay = ceil( (time.time_ns() - time1) / 1000000 )
-    if not modified or ctrl or ctrl_m:
-        if (ctrl == 1) & ((key == 'Key.ctrl_l') | (key == 'Key.ctrl_r')):
-            if (ctrl_m == 0):
-                if time1 != 0:
-                    print( f'''delay({delay});''' , end=" " )
-                    with open( f"output{num}.txt" , "a" )as output:
-                        output.write( f'''delay({delay}); ''' )
-                time1 = time.time_ns()
-
-                print( f'''keyboard.tapSpecialKey(CTRL);''' , end=" " )
-                with open( f"output{num}.txt" , "a" )as output:
-                    output.write( f'''keyboard.tapSpecialKey(CTRL); ''' )
-            ctrl = 0
-            ctrl_m = 0
+    if not modified :
         if key in modifier_key:
-
             if no_of_modifier == 1:
                 if time1 != 0:
                     print( f'''delay({delay});''' , end=" " )
@@ -209,7 +153,7 @@ def key_handeler_relased(key):
     if key in modifier_key:
         no_of_modifier -= 1
         modifier[key] = 0
-
+    print( key , no_of_modifier , modified )
 
 # print( string.punctuation + string.ascii_letters + string.digits )
 
