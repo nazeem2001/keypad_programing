@@ -3,11 +3,8 @@ import time
 from pynput import keyboard
 from math import ceil
 import sys
-
 num = int( sys.argv[1] )
-#num=int(input("enter the button number(0-9):"))
-# if num>9:
-#    raise ValueError("enter valid value")
+#num=int(input())
 special_keymap = {
     "Key.enter": 'ENTER' , "Key.esc": "ESCAPE" , "Key.backspace": "BACKSPACE" , "Key.tab": "TAB" ,
     "Key.space": "SPACEBAR" ,
@@ -26,35 +23,24 @@ output.close()
 no_of_modifier = 0
 modified = 0
 printables = list( string.punctuation + string.ascii_letters + string.digits )
-
 modifier_key = modifier.keys()
 key_was_aln = 0
 special_keymap_keys = special_keymap.keys()
-
 time_modifier = 0
-
-
 def key_handeler_pressed(key):
     global time1 , time_modifier , modified , no_of_modifier , key_was_aln
-    #key = listener.canonical( key )
     s_key = str( key )
-    print( len( s_key ) , key  )
-
+    #print( len( s_key ) , key  )
     delay = ceil( (time.time_ns() - time1) / 1000000 )
-
     if s_key in modifier_key :
         modified = 0
         key_was_aln = 0
-
-
         if not modifier[s_key]:
             no_of_modifier += 1
         modifier[s_key] = 1
-        print( s_key , no_of_modifier , modified ,modifier )
+        #print( s_key , no_of_modifier , modified ,modifier )
         pass
-
     else:
-
         modifier_active = 0
         modifier_str = ''
         for x in modifier:
@@ -63,18 +49,16 @@ def key_handeler_pressed(key):
                 modifier_str = f"{modifier_str}{special_keymap[x]}|"
                 modified = 1
         modifier_str = modifier_str[:-1]
-        print( modifier_str )
-        print(s_key)
+        #print( modifier_str )
+        #print(s_key)
         if s_key in special_keymap_keys:
             key_was_aln = 0
-
         if time1 != 0 and not key_was_aln:
             print( f'''delay({delay});''' , end=" " )
             with open( f"output{num}.txt" , "a" )as output:
                 output.write( f'''delay({delay}); ''' )
-
         if (len( s_key ) == 4) & (s_key[0] == "'"):
-            print( modifier_str[:-1] )
+            #print( modifier_str[:-1] )
             print( f'''keyboard.tapKey('\\');''' , end=" " )
             with open( f"output{num}.txt" , "a" )as output:
                 output.write( f'''keyboard.tapKey('\\'); ''' )
@@ -89,12 +73,8 @@ def key_handeler_pressed(key):
                     with open( f"output{num}.txt" , "a" )as output:
                         output.write( f'''keyboard.tapSpecialKey({special_keymap[s_key]}); ''' )
         elif len( s_key ) == 3 and not(modifier["Key.ctrl_r"]==1 or modifier["Key.ctrl_l"]==1):
-
             if s_key[1] in printables:
-                if modifier_active:
-                    print("aln")
-                    '''and not (
-                        (modifier["Key.shift_r"] == 1 or modifier["Key.shift"] == 1) and no_of_modifier == 1)'''
+                if modifier_active and not ((modifier["Key.shift_r"] == 1 or modifier["Key.shift"] == 1) and no_of_modifier == 1):
                     key_was_aln = 0
                     print( f'''keyboard.tapKey(({modifier_str}),{s_key});''' , end=" " )
                     with open( f"output{num}.txt" , "a" )as output:
@@ -104,36 +84,29 @@ def key_handeler_pressed(key):
                     print( f'''keyboard.tapKey({s_key});''' , end=" " )
                     with open( f"output{num}.txt" , "a" )as output:
                         output.write( f'''keyboard.tapKey({s_key}); ''' )
-
         elif s_key[0:5] == "Key.f":
             n = int( s_key[5:] )
             if modifier_active:
                 print( f'''keyboard.tapSpecialKey(({modifier_str}),F{n});''' , end=" " )
                 with open( f"output{num}.txt" , "a" )as output:
                     output.write( f'''keyboard.tapSpecialKey(({modifier_str}),F{n}); ''' )
-
+            else:
+                print( f'''keyboard.tapSpecialKey(F{n});''' , end=" " )
+                with open( f"output{num}.txt" , "a" )as output :
+                    output.write( f'''keyboard.tapSpecialKey(F{n}); ''' )
         elif modifier["Key.ctrl_r"]==1 or modifier["Key.ctrl_l"]==1:
             O_key = listener.canonical( key )
             O_key=str(O_key)
-            print( O_key[1],"KJQJAS")
             if O_key[1] in printables:
                 key_was_aln = 0
                 print( f'''keyboard.tapKey(({modifier_str}),{O_key});''' , end=" " )
                 with open( f"output{num}.txt" , "a" )as output:
                     output.write( f'''keyboard.tapKey(({modifier_str}),{O_key}); ''' )
-
-
         time_modifier = ceil( (time.time_ns() - time1) / 1000000 )
-
-
         time1 = time.time_ns()
-        print( key , no_of_modifier , modified )
-
-
+        #print( key , no_of_modifier , modified )
 def key_handeler_relased(key):
     global time1 , modified , no_of_modifier
-    #print( key ,  no_of_modifier , modified )
-    print( listener.canonical( key ) )
     key = str( key )
     delay = ceil( (time.time_ns() - time1) / 1000000 )
     if not modified :
@@ -143,7 +116,7 @@ def key_handeler_relased(key):
                     print( f'''delay({delay});''' , end=" " )
                     with open( f"output{num}.txt" , "a" )as output:
                         output.write( f'''delay({delay}); ''' )
-                print()
+                #print()
                 print( f'''keyboard.tapSpecialKey({special_keymap[key]});''' , end=" " )
                 with open( f"output{num}.txt" , "a" )as output:
                     output.write( f'''keyboard.tapSpecialKey({special_keymap[key]}); ''' )
@@ -153,12 +126,7 @@ def key_handeler_relased(key):
     if key in modifier_key:
         no_of_modifier -= 1
         modifier[key] = 0
-    print( key , no_of_modifier , modified )
-
-# print( string.punctuation + string.ascii_letters + string.digits )
-
-# 10
-# print( dir( KeyCode ) )
+    #print( key , no_of_modifier , modified )
 print( "close me when you are done" )
 with keyboard.Listener( on_press=key_handeler_pressed , on_release=key_handeler_relased ) as listener:
     listener.join()
