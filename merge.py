@@ -13,6 +13,6 @@ for i in range(1 ,10):
 sorce[90]=f'digitalWrite(LED_BUILTIN, HIGH); {code[0]}digitalWrite(LED_BUILTIN, LOW); '
 
 print( code )
-with open("code_final.txt","w") as output:
+with open("code_final/code_final.ino","w") as output:
     output.writelines(sorce)
 
