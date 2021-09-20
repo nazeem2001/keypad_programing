@@ -109,17 +109,44 @@ if __name__ == '__main__':
     num = int( sys.argv[1] )
     #num=int(input())
     special_keymap = {
-        "Key.enter": 'ENTER' , "Key.esc": "ESCAPE" , "Key.backspace": "BACKSPACE" , "Key.tab": "TAB" ,
-        "Key.space": "SPACEBAR" ,
-        "Key.caps_lock": "CAPSLOCK" , "Key.print_screen": "PRINTSCREEN" , "Key.scroll_lock": "SCROLLLOCK" ,
-        "Key.pause": "PAUSE" ,
-        "Key.insert": "INSERT" , "Key.home": "HOME" , "Key.page_up": "PAGEUP" , "Key.delete": "DELETE" , "Key.end": "END" ,
-        "Key.page_down": "PAGEDOWN" , "Key.right": "RIGHTARROW" , "Key.left": "LEFTARROW" , "Key.down": "DOWNARROW" ,
-        "Key.up": "UPARROW" , "Key.num_lock": "NUMLOCK" , "Key.cmd": "GUI" , "Key.alt_l": "ALT" , "Key.alt_gr": "ALT" ,
-        "Key.menu": "KEYBOARDAPPLICATION" , "Key.shift": "SHIFT" , "Key.shift_r": "SHIFT","Key.ctrl_l":"CTRL","Key.ctrl_r":"CTRL"
+        "Key.enter" : 'ENTER' ,
+        "Key.esc" : "ESCAPE" ,
+        "Key.backspace" : "BACKSPACE" ,
+        "Key.tab" : "TAB" ,
+        "Key.space" : "SPACEBAR",
+        "Key.caps_lock" : "CAPSLOCK" ,
+        "Key.print_screen" : "PRINTSCREEN" ,
+        "Key.scroll_lock" : "SCROLLLOCK" ,
+        "Key.pause" : "PAUSE" ,
+        "Key.insert" : "INSERT" ,
+        "Key.home" : "HOME" ,
+        "Key.page_up" : "PAGEUP" ,
+        "Key.delete" : "DELETE" ,
+        "Key.end" : "END" ,
+        "Key.page_down" : "PAGEDOWN" ,
+        "Key.right" : "RIGHTARROW" ,
+        "Key.left" : "LEFTARROW" ,
+        "Key.down" : "DOWNARROW" ,
+        "Key.up" : "UPARROW" ,
+        "Key.num_lock" : "NUMLOCK" ,
+        "Key.cmd" : "GUI" ,
+        "Key.alt_l" : "ALT" ,
+        "Key.alt_gr" : "ALT" ,
+        "Key.menu" : "KEYBOARDAPPLICATION" ,
+        "Key.shift" : "SHIFT" ,
+        "Key.shift_r" : "SHIFT" ,
+        "Key.ctrl_l" : "CTRL" ,
+        "Key.ctrl_r" : "CTRL",
+        "Key.media_volume_down" : "VOLUMEDOWN",
+        "Key.media_volume_up" : "VOLUMEUP"
     }
-    modifier = {"Key.cmd": 0 , "Key.alt_l": 0 , "Key.alt_gr": 0 , "Key.shift": 0 , "Key.shift_r": 0,
-                "Key.ctrl_l":0,"Key.ctrl_r":0}
+    modifier = {"Key.cmd": 0 ,
+                "Key.alt_l": 0 ,
+                "Key.alt_gr": 0 ,
+                "Key.shift": 0 ,
+                "Key.shift_r": 0,
+                "Key.ctrl_l":0,
+                "Key.ctrl_r":0}
     time1 = 0
     output = open( f"output{num}.txt" , "w" )
     output.close()
