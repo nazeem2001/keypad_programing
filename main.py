@@ -46,7 +46,7 @@ def key_handeler_pressed(key) :
         elif s_key in special_keymap_keys :
             if s_key not in modifier_key :
                 if modifier_active == 1 :
-                    co = '''keyboard.tapSpecialKey(({modifier_str}),{special_keymap[s_key]});'''
+                    co = f'''keyboard.tapSpecialKey(({modifier_str}),{special_keymap[s_key]});'''
                     op += co
                     text.insert( tk.INSERT , co + '\n' )
                 else :
