@@ -3,27 +3,27 @@ import tkinter as tk
 
 
 def b0():
-    os.system( '''start cmd.exe @cmd /k "python main.py 0"''' )
+    os.system( "python main.py 0" )
 def b1():
-    os.system( '''start cmd.exe @cmd /k "python main.py 1"''' )
+    os.system( "python main.py 1" )
 def b2():
-    os.system( '''start cmd.exe @cmd /k "python main.py 2"''' )
+    os.system( "python main.py 2" )
 def b3():
-    os.system( '''start cmd.exe @cmd /k "python main.py 3"''' )
+    os.system( "python main.py 3" )
 def b4():
-    os.system( '''start cmd.exe @cmd /k "python main.py 4"''' )
+    os.system( "python main.py 4" )
 def b5():
-    os.system( '''start cmd.exe @cmd /k "python main.py 5"''' )
+    os.system( "python main.py 5" )
 def b6():
-    os.system( '''start cmd.exe @cmd /k "python main.py 6"''' )
+    os.system( "python main.py 6" )
 def b7():
-    os.system( '''start cmd.exe @cmd /k "python main.py 7"''' )
+    os.system( "python main.py 7" )
 def b8():
-    os.system( '''start cmd.exe @cmd /k "python main.py 8"''' )
+    os.system( "python main.py 8" )
 def b9():
-    os.system( '''start cmd.exe @cmd /k "python main.py 9"''' )
+    os.system( "python main.py 9" )
 def bm():
-    os.system( '''start cmd.exe @cmd /k "python merge.py && exit"''' )
+    os.system( "python merge.py" )
 def main():
     window=tk.Tk()
     window.title("keypad Progmer")
