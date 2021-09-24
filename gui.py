@@ -1,29 +1,29 @@
-import os
+import subprocess
 import tkinter as tk
 
 
 def b0():
-    os.system( "python main.py 0" )
+    subprocess.Popen( "python main.py 0" )
 def b1():
-    os.system( "python main.py 1" )
+    subprocess.Popen( "python main.py 1" )
 def b2():
-    os.system( "python main.py 2" )
+    subprocess.Popen( "python main.py 2" )
 def b3():
-    os.system( "python main.py 3" )
+    subprocess.Popen( "python main.py 3" )
 def b4():
-    os.system( "python main.py 4" )
+    subprocess.Popen( "python main.py 4" )
 def b5():
-    os.system( "python main.py 5" )
+    subprocess.Popen( "python main.py 5" )
 def b6():
-    os.system( "python main.py 6" )
+    subprocess.Popen( "python main.py 6" )
 def b7():
-    os.system( "python main.py 7" )
+    subprocess.Popen( "python main.py 7" )
 def b8():
-    os.system( "python main.py 8" )
+    subprocess.Popen( "python main.py 8" )
 def b9():
-    os.system( "python main.py 9" )
+    subprocess.Popen( "python main.py 9" )
 def bm():
-    os.system( "python merge.py" )
+    subprocess.Popen( "python merge.py" )
 def main():
     window=tk.Tk()
     window.title("keypad Progmer")
